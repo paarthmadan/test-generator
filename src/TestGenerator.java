@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -22,8 +23,8 @@ public class TestGenerator {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		
-		openPane = new OptionPanel("Open Existing Test", "");
-		newTestPane = new OptionPanel("Create New Test", "");
+		openPane = new OptionPanel("Open Existing Test", new File("OpenIcon.png"));
+		newTestPane = new OptionPanel("Create New Test", new File("OpenIcon.png"));
 		
 		mainFrame.add(BorderLayout.WEST, openPane);
 		mainFrame.add(BorderLayout.EAST, newTestPane);
