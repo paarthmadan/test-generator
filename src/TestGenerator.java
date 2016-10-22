@@ -1,3 +1,5 @@
+import java.awt.BorderLayout;
+
 import javax.swing.*;
 
 public class TestGenerator {
@@ -7,7 +9,10 @@ public class TestGenerator {
 	final int SCREEN_WIDTH = 500;
 	final int SCREEN_HEIGHT = 300;
 	
+	//UI Components
 	JFrame mainFrame;
+	OptionPanel openPane;
+	OptionPanel newTestPane;
 	
 	public TestGenerator(){
 		mainFrame = new JFrame();
@@ -16,6 +21,12 @@ public class TestGenerator {
 		mainFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
+		
+		openPane = new OptionPanel("Open Existing Test", "");
+		newTestPane = new OptionPanel("Create New Test", "");
+		
+		mainFrame.add(BorderLayout.WEST, openPane);
+		mainFrame.add(BorderLayout.EAST, newTestPane);
 		
 		mainFrame.setVisible(true);
 	}
