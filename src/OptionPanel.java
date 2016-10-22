@@ -1,9 +1,9 @@
-import java.awt.Image;
+import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class OptionPanel extends JPanel{
 	
@@ -12,11 +12,12 @@ public class OptionPanel extends JPanel{
 	private ImageIcon icon;
 	
 	
-	public OptionPanel(String label, File iconPath){
+	public OptionPanel(String labelText, File iconPath){
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		button = new JButton();
+		label = new JLabel(labelText);
 		
 		try {
 			icon = new ImageIcon(ImageIO.read(iconPath));
@@ -25,8 +26,13 @@ public class OptionPanel extends JPanel{
 			e.printStackTrace();
 		}
 		
+		button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		label.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		this.setBorder(new EmptyBorder(10,10,10,10));
+		
 		this.add(button);
-		this.add(new JLabel(label));
+		this.add(label);
 		
 	}
 

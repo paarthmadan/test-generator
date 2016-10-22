@@ -8,7 +8,7 @@ public class TestGenerator {
 	//CONSTANTS
 	final String APP_NAME = "Test Generator";
 	final int SCREEN_WIDTH = 500;
-	final int SCREEN_HEIGHT = 300;
+	final int SCREEN_HEIGHT = 325;
 	
 	//UI Components
 	JFrame mainFrame;
@@ -24,7 +24,7 @@ public class TestGenerator {
 		mainFrame.setLocationRelativeTo(null);
 		
 		openPane = new OptionPanel("Open Existing Test", new File("OpenIcon.png"));
-		newTestPane = new OptionPanel("Create New Test", new File("OpenIcon.png"));
+		newTestPane = new OptionPanel("Create New Test", new File("NewTestIcon.png"));
 		
 		mainFrame.add(BorderLayout.WEST, openPane);
 		mainFrame.add(BorderLayout.EAST, newTestPane);
