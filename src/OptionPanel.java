@@ -1,4 +1,5 @@
 import java.awt.Component;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -8,7 +9,7 @@ import javax.swing.border.EmptyBorder;
 public class OptionPanel extends JPanel{
 	
 	private JLabel label;
-	private JButton button;
+    private JButton button;
 	private ImageIcon icon;
 	
 	
@@ -21,21 +22,27 @@ public class OptionPanel extends JPanel{
 		
 		try {
 			icon = new ImageIcon(ImageIO.read(iconPath));
-			button.setIcon(icon);
+			getButton().setIcon(icon);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		button.setAlignmentX(Component.CENTER_ALIGNMENT);
-		button.setSelected(false);
+		getButton().setAlignmentX(Component.CENTER_ALIGNMENT);
+		getButton().setSelected(false);
 		
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		this.setBorder(new EmptyBorder(10,10,10,10));
 		
-		this.add(button);
+		this.add(getButton());
 		this.add(label);
 		
 	}
+
+
+	public JButton getButton() {
+		return button;
+	}
+
 
 }

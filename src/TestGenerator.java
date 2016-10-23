@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.*;
@@ -25,6 +27,21 @@ public class TestGenerator {
 		
 		openPane = new OptionPanel("Open Existing Test", new File("OpenIcon.png"));
 		newTestPane = new OptionPanel("Create New Test", new File("NewTestIcon.png"));
+		
+		//ON CLICK LISTENERS
+		openPane.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//Handle Open Test
+				System.out.println("Open Test");
+			}
+		});
+		
+		newTestPane.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//Handle New Test
+				System.out.println("New Test");
+			}
+		});
 		
 		mainFrame.add(BorderLayout.WEST, openPane);
 		mainFrame.add(BorderLayout.EAST, newTestPane);
