@@ -27,6 +27,8 @@ public class OptionPanel extends JPanel{
 		}
 		
 		button.setAlignmentX(Component.CENTER_ALIGNMENT);
+		button.setSelected(false);
+		
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		this.setBorder(new EmptyBorder(10,10,10,10));

@@ -30,6 +30,9 @@ public class TestGenerator {
 		mainFrame.add(BorderLayout.EAST, newTestPane);
 		
 		mainFrame.setVisible(true);
+		
+		//prevents button from being selected
+		mainFrame.requestFocus();
 	}
 	
 	
