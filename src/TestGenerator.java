@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -40,6 +41,7 @@ public class TestGenerator {
 			public void actionPerformed(ActionEvent e) {
 				//Handle New Test
 				System.out.println("New Test");
+				clearScreen();
 			}
 		});
 		
@@ -55,5 +57,12 @@ public class TestGenerator {
 	
 	public static void main(String[] args) {
 		new TestGenerator();
+	}
+	
+	public void clearScreen(){
+		Container pane = mainFrame.getContentPane();
+		pane.removeAll();
+		pane.validate();
+		pane.repaint();
 	}
 }
