@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,8 @@ public class TestGenerator {
 	OptionPanel openPane;
 	OptionPanel newTestPane;
 	
+	TrueFalse finalTf;
+	
 	public TestGenerator(){
 		mainFrame = new JFrame();
 		
@@ -31,6 +34,8 @@ public class TestGenerator {
 		
 		openPane = new OptionPanel("Open Existing Test", new File("OpenIcon.png"));
 		newTestPane = new OptionPanel("Create New Test", new File("NewTestIcon.png"));
+		
+		
 		
 		//ON CLICK LISTENERS
 		openPane.getButton().addActionListener(new ActionListener(){
@@ -56,11 +61,6 @@ public class TestGenerator {
 		
 		//prevents button from being selected
 		mainFrame.requestFocus();
-	}
-	
-	
-	public static void main(String[] args) {
-		new TestGenerator();
 	}
 	
 	public void clearScreen(){
@@ -128,15 +128,42 @@ public class TestGenerator {
 		mainFrame.getContentPane().repaint();
 	}
 	
-	public void generateQuestion(){
+	public Question generateQuestion(){
 		clearScreen();
 		
 		mainFrame.setTitle("Choose Question");
 		
+		Question [] questionArray = new Question[1];
+		
 		OptionPanel mp = new OptionPanel("Multiple Choice", new File("MultipleChoiceIcon.png"));
+		
+		mp.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 		OptionPanel tf = new OptionPanel("True or False", new File("TrueFalseIcon.png"));
+		
+		tf.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+				createTrueFalse();
+
+			}
+			
+		});
+		
 		OptionPanel sa = new OptionPanel("Short Answer", new File("ShortAnswerIcon.png"));
 		
+		sa.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+		});
+
 		mainFrame.add(BorderLayout.WEST, mp);
 		mainFrame.add(BorderLayout.CENTER, tf);
 		mainFrame.add(BorderLayout.EAST, sa);
@@ -145,6 +172,57 @@ public class TestGenerator {
 		
 		addContent();
 		
+		return questionArray[0];
+		
 	}
+	
+	public void createTrueFalse(){
+		clearScreen();
+		
+		JPanel tfPanel = new JPanel();
+		tfPanel.setLayout(new BoxLayout(tfPanel, BoxLayout.Y_AXIS));
+		
+		JTextField questionField = new JTextField();
+		questionField.setMaximumSize(new Dimension(450, 25)); 
+		
+		JTextField trueField = new JTextField();
+		trueField.setMaximumSize(new Dimension(450, 25));
+		
+		JTextField falseField = new JTextField();
+		falseField.setMaximumSize(new Dimension(450, 25));
+		
+		JLabel questionLabel = new JLabel("Question:");
+		questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel trueLabel = new JLabel("True:");
+		trueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel falseLabel = new JLabel("False:");
+		falseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton addButton = new JButton("Add Question");
+		addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		tfPanel.add(questionLabel);
+		tfPanel.add(questionField);
+		tfPanel.add(trueLabel);
+		tfPanel.add(trueField);
+		tfPanel.add(falseLabel);
+		tfPanel.add(falseField);
+		tfPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		tfPanel.add(addButton);
+		
+		
+		mainFrame.add(tfPanel);
+		mainFrame.setSize(mainFrame.getWidth() - 200 , SCREEN_HEIGHT - 125);
+		
+		addContent();
+		
+	}
+	
+	public static void main(String[] args) {
+		new TestGenerator();
+	}
+	
 	
 }
