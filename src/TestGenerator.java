@@ -79,6 +79,12 @@ public class TestGenerator {
 		
 		OptionPanel questionButtonPanel = new OptionPanel("Add Question", new File("OpenIcon.png"));
 		
+		questionButtonPanel.getButton().addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				generateQuestion();
+			}
+		});
+		
 		JLabel enterTitleLabel = new JLabel("Enter the Test Title:");
 		
 		JTextField textField = new JTextField(20);
@@ -113,9 +119,32 @@ public class TestGenerator {
 		mainFrame.setSize(SCREEN_WIDTH + 100, SCREEN_HEIGHT);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setResizable(false);
-		
+		addContent();
+	}
+	
+	public void addContent(){
+		mainFrame.setLocationRelativeTo(null);
 		mainFrame.getContentPane().validate();
 		mainFrame.getContentPane().repaint();
+	}
+	
+	public void generateQuestion(){
+		clearScreen();
+		
+		mainFrame.setTitle("Choose Question");
+		
+		OptionPanel mp = new OptionPanel("Multiple Choice", new File("OpenIcon.png"));
+		OptionPanel tf = new OptionPanel("True or False", new File("OpenIcon.png"));
+		OptionPanel sa = new OptionPanel("Short Answer", new File("OpenIcon.png"));
+		
+		mainFrame.add(BorderLayout.WEST, mp);
+		mainFrame.add(BorderLayout.CENTER, tf);
+		mainFrame.add(BorderLayout.EAST, sa);
+		
+		mainFrame.setSize(mainFrame.getWidth() + 100, SCREEN_HEIGHT);
+		
+		addContent();
 		
 	}
+	
 }
