@@ -1,8 +1,10 @@
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -25,6 +27,7 @@ public class TestGenerator {
 		mainFrame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setResizable(false);
 		
 		openPane = new OptionPanel("Open Existing Test", new File("OpenIcon.png"));
 		newTestPane = new OptionPanel("Create New Test", new File("NewTestIcon.png"));
@@ -42,6 +45,7 @@ public class TestGenerator {
 				//Handle New Test
 				System.out.println("New Test");
 				clearScreen();
+				createQuestionPanel();
 			}
 		});
 		
@@ -64,5 +68,54 @@ public class TestGenerator {
 		pane.removeAll();
 		pane.validate();
 		pane.repaint();
+	}
+	
+	public void createQuestionPanel(){
+		
+		JPanel questionPanel = new JPanel();
+		ArrayList<Question> questions = new ArrayList<Question>();
+		
+		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
+		
+		OptionPanel questionButtonPanel = new OptionPanel("Add Question", new File("OpenIcon.png"));
+		
+		JLabel enterTitleLabel = new JLabel("Enter the Test Title:");
+		
+		JTextField textField = new JTextField(20);
+		textField.setMaximumSize(new Dimension(700, 20));
+		
+		JLabel numberOfVariationsLabel = new JLabel("Input the number of alternate tests:");
+		
+		JSlider slider = new JSlider(1,5);
+		slider.setSnapToTicks(true);
+		slider.setMajorTickSpacing(1);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		
+		JLabel questionsCounter = new JLabel();
+		questionsCounter.setText("Questions: " + questions.size());
+		
+		JButton generateTestButton = new JButton("Generate Test");
+		
+		questionPanel.add(enterTitleLabel);
+		questionPanel.add(textField);
+		questionPanel.add(Box.createRigidArea(new Dimension(0,25)));
+		questionPanel.add(numberOfVariationsLabel);
+		questionPanel.add(slider);
+		questionPanel.add(Box.createRigidArea(new Dimension(0,25)));
+		questionPanel.add(questionsCounter);
+		questionPanel.add(Box.createRigidArea(new Dimension(0,40)));
+		questionPanel.add(generateTestButton);
+		
+		mainFrame.add(BorderLayout.WEST, questionButtonPanel);
+		mainFrame.add(BorderLayout.EAST, questionPanel);
+		
+		mainFrame.setSize(SCREEN_WIDTH + 100, SCREEN_HEIGHT);
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setResizable(false);
+		
+		mainFrame.getContentPane().validate();
+		mainFrame.getContentPane().repaint();
+		
 	}
 }
