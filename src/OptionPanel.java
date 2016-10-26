@@ -24,6 +24,14 @@ public class OptionPanel extends JPanel{
 			icon = new ImageIcon(ImageIO.read(iconPath));
 			getButton().setIcon(icon);
 		} catch (IOException e) {
+			
+			try{
+				icon = new ImageIcon(ImageIO.read(new File("../" + iconPath.getName())));
+				getButton().setIcon(icon);
+			}catch(Exception e2){
+				e.printStackTrace();
+			}
+			
 			e.printStackTrace();
 		}
 		

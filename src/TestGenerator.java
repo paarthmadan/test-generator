@@ -77,7 +77,7 @@ public class TestGenerator {
 		
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
 		
-		OptionPanel questionButtonPanel = new OptionPanel("Add Question", new File("OpenIcon.png"));
+		OptionPanel questionButtonPanel = new OptionPanel("Add Question", new File("QuestionIcon.png"));
 		
 		questionButtonPanel.getButton().addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -133,9 +133,9 @@ public class TestGenerator {
 		
 		mainFrame.setTitle("Choose Question");
 		
-		OptionPanel mp = new OptionPanel("Multiple Choice", new File("OpenIcon.png"));
-		OptionPanel tf = new OptionPanel("True or False", new File("OpenIcon.png"));
-		OptionPanel sa = new OptionPanel("Short Answer", new File("OpenIcon.png"));
+		OptionPanel mp = new OptionPanel("Multiple Choice", new File("MultipleChoiceIcon.png"));
+		OptionPanel tf = new OptionPanel("True or False", new File("TrueFalseIcon.png"));
+		OptionPanel sa = new OptionPanel("Short Answer", new File("ShortAnswerIcon.png"));
 		
 		mainFrame.add(BorderLayout.WEST, mp);
 		mainFrame.add(BorderLayout.CENTER, tf);
