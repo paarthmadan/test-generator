@@ -1,31 +1,14 @@
 
 public class TrueFalse extends Question{
 
-	private String trueValue;
-	private String falseValue;
+	private boolean answer;
 	
-	public TrueFalse(String question, String trueValue, String falseValue){
-		super(question);
-		
-		this.trueValue = trueValue;
-		this.falseValue = falseValue;
-		
+	public TrueFalse(String question, boolean answer){
+      super(question);
+      this.answer = answer;
 	}
-	
-	public String getTrueValue(){
-		return this.trueValue;
-	}
-
-	public String getFalseValue(){
-		return this.falseValue;
-	}
-	
-	public void setTrueValue(String trueValue){
-		this.trueValue = trueValue;
-	}
-	
-	public void setFalseValue(String falseValue){
-		this.falseValue = falseValue;
-	}
-	
+   
+   public boolean getCorrectAnswer(){
+      return this.answer;
+   }	
 }

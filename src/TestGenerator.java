@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -18,11 +19,20 @@ public class TestGenerator {
 	
 	//UI Components
 	JFrame mainFrame;
+   JFrame newQuestionFrame;
 	OptionPanel openPane;
 	OptionPanel newTestPane;
+   JLabel questionsCounter;
 	
 	TrueFalse finalTf;
-	
+   
+   ArrayList<MultipleChoice> mcQuestions;
+   ArrayList<TrueFalse> tfQuestions;
+	ArrayList<Question> saQuestions;
+   
+   boolean stateTrueFalse;
+   JLabel trueFalseLabel;
+   
 	public TestGenerator(){
 		mainFrame = new JFrame();
 		
@@ -69,12 +79,21 @@ public class TestGenerator {
 		pane.validate();
 		pane.repaint();
 	}
-	
+
+	public void clearScreen(JFrame f){
+		Container pane = f.getContentPane();
+		pane.removeAll();
+		pane.validate();
+		pane.repaint();
+	}
+
 	public void createQuestionPanel(){
 		
 		JPanel questionPanel = new JPanel();
-		ArrayList<Question> questions = new ArrayList<Question>();
-		
+		tfQuestions = new ArrayList<TrueFalse>();
+		mcQuestions = new ArrayList<MultipleChoice>();
+      saQuestions = new ArrayList<Question>();
+      
 		questionPanel.setLayout(new BoxLayout(questionPanel, BoxLayout.Y_AXIS));
 		
 		OptionPanel questionButtonPanel = new OptionPanel("Add Question", new File("QuestionIcon.png"));
@@ -87,7 +106,7 @@ public class TestGenerator {
 		
 		JLabel enterTitleLabel = new JLabel("Enter the Test Title:");
 		
-		JTextField textField = new JTextField(20);
+		final JTextField textField = new JTextField(20);
 		textField.setMaximumSize(new Dimension(700, 20));
 		
 		JLabel numberOfVariationsLabel = new JLabel("Input the number of alternate tests:");
@@ -98,10 +117,20 @@ public class TestGenerator {
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 		
-		JLabel questionsCounter = new JLabel();
-		questionsCounter.setText("Questions: " + questions.size());
+		questionsCounter = new JLabel();
+		
+      updateQuestionCounter();
 		
 		JButton generateTestButton = new JButton("Generate Test");
+      
+      generateTestButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				Test t = new Test(textField.getText(), tfQuestions, mcQuestions, saQuestions);
+            Publish p = new Publish(t);
+            p.print();
+            cleanup();
+			}
+		});
 		
 		questionPanel.add(enterTitleLabel);
 		questionPanel.add(textField);
@@ -128,18 +157,23 @@ public class TestGenerator {
 		mainFrame.getContentPane().repaint();
 	}
 	
-	public Question generateQuestion(){
-		clearScreen();
-		
-		mainFrame.setTitle("Choose Question");
-		
-		Question [] questionArray = new Question[1];
+   public void addContent(JFrame f){
+      f.setLocationRelativeTo(null);
+		f.getContentPane().validate();
+		f.getContentPane().repaint();
+   }
+   
+	public void generateQuestion(){
+   		
+      newQuestionFrame = new JFrame();
+      
+		newQuestionFrame.setTitle("Choose Question");
 		
 		OptionPanel mp = new OptionPanel("Multiple Choice", new File("MultipleChoiceIcon.png"));
 		
 		mp.getButton().addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				
+				createMultipleChoice();
 			}
 		});
 		
@@ -147,9 +181,7 @@ public class TestGenerator {
 		
 		tf.getButton().addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				
-				createTrueFalse();
-
+            createTrueFalse();
 			}
 			
 		});
@@ -158,71 +190,233 @@ public class TestGenerator {
 		
 		sa.getButton().addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
+				createShortAnswer();
 			}
 		});
 
-		mainFrame.add(BorderLayout.WEST, mp);
-		mainFrame.add(BorderLayout.CENTER, tf);
-		mainFrame.add(BorderLayout.EAST, sa);
+		newQuestionFrame.add(BorderLayout.WEST, mp);
+		newQuestionFrame.add(BorderLayout.CENTER, tf);
+		newQuestionFrame.add(BorderLayout.EAST, sa);
 		
-		mainFrame.setSize(mainFrame.getWidth() + 100, SCREEN_HEIGHT);
+		newQuestionFrame.setSize(mainFrame.getWidth() + 100, SCREEN_HEIGHT);
 		
-		addContent();
+      newQuestionFrame.setVisible(true);
+      
+		addContent(newQuestionFrame);
 		
-		return questionArray[0];
 		
 	}
+   
+   public void cleanup(){
+      newQuestionFrame.dispose();
+      mainFrame.dispose();
+   }
+   
+   public void updateQuestionCounter(){
+      questionsCounter.setText("Questions: " + (tfQuestions.size() + mcQuestions.size() + saQuestions.size()));
+      addContent();
+   }
+   
+   public void addTrueFalse(String q, boolean answer){
+      assert(tfQuestions != null);
+      tfQuestions.add(new TrueFalse(q, answer));
+      updateQuestionCounter();
+   }
+   
+   public void addShortAnswer(String q){
+      assert(saQuestions != null);
+      saQuestions.add(new Question(q));
+      updateQuestionCounter();
+   }
+   
+   public void addMultipleChoice(String q, String one, String two, String three, String four, int correctIndex){
+      assert(mcQuestions != null);
+      ArrayList<String> mc = new ArrayList<String>();
+      mc.add(one);
+      mc.add(two);
+      mc.add(three);
+      mc.add(four);
+      mcQuestions.add(new MultipleChoice(q, mc, correctIndex));
+      updateQuestionCounter();
+   }
 	
 	public void createTrueFalse(){
-		clearScreen();
+		clearScreen(newQuestionFrame);
 		
 		JPanel tfPanel = new JPanel();
 		tfPanel.setLayout(new BoxLayout(tfPanel, BoxLayout.Y_AXIS));
 		
-		JTextField questionField = new JTextField();
+		final JTextField questionField = new JTextField();
 		questionField.setMaximumSize(new Dimension(450, 25)); 
 		
-		JTextField trueField = new JTextField();
-		trueField.setMaximumSize(new Dimension(450, 25));
-		
-		JTextField falseField = new JTextField();
-		falseField.setMaximumSize(new Dimension(450, 25));
-		
-		JLabel questionLabel = new JLabel("Question:");
+		JLabel questionLabel = new JLabel("Statement:");
 		questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JLabel trueLabel = new JLabel("True:");
-		trueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		JLabel falseLabel = new JLabel("False:");
-		falseLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		JButton addButton = new JButton("Add Question");
 		addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+      JToggleButton trueFalse = new JToggleButton("True / False");
+      trueFalse.setAlignmentX(Component.CENTER_ALIGNMENT);
+      
+
+      
+		trueFalseLabel = new JLabel(": False");
+		
+      addButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+            String question = questionField.getText();
+            addTrueFalse(question, stateTrueFalse);
+            System.out.println(question);
+            newQuestionFrame.dispose();
+         }
+			
+		});
+
+      trueFalse.addItemListener(new ItemListener() {
+         public void itemStateChanged(ItemEvent ev) {
+            if(ev.getStateChange()==ItemEvent.SELECTED){
+               stateTrueFalse = true;
+               trueFalseLabel.setText(": True");
+            } else if(ev.getStateChange()==ItemEvent.DESELECTED){
+               stateTrueFalse = false;
+               trueFalseLabel.setText(": False");
+            }
+         }
+      });
+      
 		tfPanel.add(questionLabel);
 		tfPanel.add(questionField);
-		tfPanel.add(trueLabel);
-		tfPanel.add(trueField);
-		tfPanel.add(falseLabel);
-		tfPanel.add(falseField);
+      tfPanel.add(Box.createRigidArea(new Dimension(0,10)));
+      JPanel trueFalseTogglePanel = new JPanel();
+      trueFalseTogglePanel.add(trueFalse);
+      trueFalseTogglePanel.add(trueFalseLabel);
+      tfPanel.add(trueFalseTogglePanel);
+//       tfPanel.add(trueFalse);
+//       tfPanel.add(trueFalseLabel);
+		tfPanel.add(addButton);
+		
+		newQuestionFrame.add(tfPanel);
+		newQuestionFrame.setSize(mainFrame.getWidth() - 150 , SCREEN_HEIGHT - 175);
+		
+		addContent(newQuestionFrame);
+		
+	}
+   
+   public void createShortAnswer(){
+		clearScreen(newQuestionFrame);
+		
+		JPanel tfPanel = new JPanel();
+		tfPanel.setLayout(new BoxLayout(tfPanel, BoxLayout.Y_AXIS));
+		
+		final JTextField questionField = new JTextField();
+		questionField.setMaximumSize(new Dimension(450, 25)); 
+		
+		JLabel questionLabel = new JLabel("Question:");
+		questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JButton addButton = new JButton("Add Question");
+		addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+      addButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+            String question = questionField.getText();
+            addShortAnswer(question);
+            newQuestionFrame.dispose();
+         }
+			
+		});
+
+      
+		tfPanel.add(questionLabel);
+		tfPanel.add(questionField);
 		tfPanel.add(Box.createRigidArea(new Dimension(0,10)));
 		tfPanel.add(addButton);
 		
 		
-		mainFrame.add(tfPanel);
-		mainFrame.setSize(mainFrame.getWidth() - 200 , SCREEN_HEIGHT - 125);
+		newQuestionFrame.add(tfPanel);
+		newQuestionFrame.setSize(mainFrame.getWidth() - 150 , SCREEN_HEIGHT - 200);
 		
-		addContent();
+		addContent(newQuestionFrame);
 		
 	}
+
+   
+   public void createMultipleChoice(){
+		clearScreen(newQuestionFrame);
+		
+		JPanel tfPanel = new JPanel();
+		tfPanel.setLayout(new BoxLayout(tfPanel, BoxLayout.Y_AXIS));
+		
+		final JTextField questionField = new JTextField();
+		questionField.setMaximumSize(new Dimension(450, 25)); 
+		
+		final JTextField optionOne = new JTextField();
+		optionOne.setMaximumSize(new Dimension(450, 25));
+		
+		final JTextField optionTwo = new JTextField();
+		optionTwo.setMaximumSize(new Dimension(450, 25));
+      
+      final JTextField optionThree = new JTextField();
+		optionThree.setMaximumSize(new Dimension(450, 25));
+		
+		final JTextField optionFour = new JTextField();
+		optionFour.setMaximumSize(new Dimension(450, 25));
+      
+      JLabel questionLabel = new JLabel("Question:");
+		questionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel one = new JLabel("Option One / Correct Answer:");
+		one.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel two = new JLabel("Option Two:");
+		two.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+      JLabel three = new JLabel("Option Three:");
+		three.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		JLabel four = new JLabel("Option Four:");
+		four.setAlignmentX(Component.CENTER_ALIGNMENT);
+      
+      JButton addButton = new JButton("Add Question");
+		addButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+      addButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+            String question = questionField.getText();
+            String aOne = optionOne.getText();
+            String aTwo = optionTwo.getText();
+            String aThree = optionThree.getText();
+            String aFour = optionFour.getText();
+            
+            addMultipleChoice(question, aOne, aTwo, aThree, aFour, 0);
+            newQuestionFrame.dispose();
+			}
+			
+		});
+
+		tfPanel.add(questionLabel);
+		tfPanel.add(questionField);
+		tfPanel.add(one);
+		tfPanel.add(optionOne);
+		tfPanel.add(two);
+		tfPanel.add(optionTwo);
+		tfPanel.add(three);
+		tfPanel.add(optionThree);
+		tfPanel.add(four);
+		tfPanel.add(optionFour);
+		tfPanel.add(Box.createRigidArea(new Dimension(0,10)));
+		tfPanel.add(addButton);
+		
+		
+		newQuestionFrame.add(tfPanel);
+		newQuestionFrame.setSize(mainFrame.getWidth() - 200 , SCREEN_HEIGHT - 25);
+		
+		addContent(newQuestionFrame);
+		
+	}
+
 	
 	public static void main(String[] args) {
 		new TestGenerator();
-	}
-	
-	
+	}   
 }

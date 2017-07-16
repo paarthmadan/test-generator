@@ -32,11 +32,13 @@ public class OptionPanel extends JPanel{
 				e.printStackTrace();
 			}
 			
-			e.printStackTrace();
+// 			e.printStackTrace();
 		}
 		
 		getButton().setAlignmentX(Component.CENTER_ALIGNMENT);
 		getButton().setSelected(false);
+      button.setBorderPainted(false);
+      button.setBorder(null);
 		
 		label.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
